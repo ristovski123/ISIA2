@@ -23,6 +23,7 @@ class TupleToMultiDiscreteWrapper(gymnasium.ObservationWrapper):
         # Convert Tuple observation to MultiDiscrete observation
         
 
+
 models_dir = "models/Blackjack/PPO"
 logdir = "logs/Blackjack"
 
@@ -45,7 +46,7 @@ model = PPO('MlpPolicy', env, verbose=1,tensorboard_log=logdir)
 
 TIMESTEPS = 10000
 iters = 0
-for i in range(30):
+for i in range(100):
     model.learn(total_timesteps=TIMESTEPS, reset_num_timesteps=False, tb_log_name="PPO")
     model.save(f"{models_dir}/{TIMESTEPS*i}")
 
@@ -61,7 +62,7 @@ for ep in range(episodes):
         print("obs: ", obs)
         print("action made by model: ", action)
         # pass action to env and get info back
-        obs, rewards, trunc, done, info = env.step(action)
+        obs, rewards, done,trunc,  info = env.step(action)
 
         # show the environment on the screen
         env.render()
