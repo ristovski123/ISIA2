@@ -1,15 +1,18 @@
-import gymnasium as gym
-from stable_baselines3 import PPO
+from stable_baselines3.common.env_checker import check_env
+from blackjenv import BlackjackWithDoubleEnv
 import numpy as np
+import gymnasium
+from stable_baselines3 import PPO
 
-class TupleToMultiDiscreteWrapper(gym.ObservationWrapper):
+class TupleToMultiDiscreteWrapper(gymnasium.ObservationWrapper):
     def __init__(self, env):
         super(TupleToMultiDiscreteWrapper, self).__init__(env)
         parametro_1 = self.observation_space.spaces[0].n
         parametro_2 = self.observation_space.spaces[1].n
         parametro_3 = self.observation_space.spaces[2].n
 
-        self.observation_space = gym.spaces.MultiDiscrete([parametro_1,parametro_2,parametro_3])
+
+        self.observation_space = gymnasium.spaces.MultiDiscrete([parametro_1,parametro_2,parametro_3])
 
     def observation(self, observation):
         parametro_1 = observation[0]
@@ -18,15 +21,12 @@ class TupleToMultiDiscreteWrapper(gym.ObservationWrapper):
         observation_space = np.array([parametro_1,parametro_2,parametro_3])
         return observation_space
         # Convert Tuple observation to MultiDiscrete observation
-        
 
-print ("cona pesada")
-models_dir = "models/Blackjack/PPO"
-
-env = gym.make('Blackjack-v1', render_mode="human")  # continuous: LunarLanderContinuous-v2
+env = BlackjackWithDoubleEnv()
 env = TupleToMultiDiscreteWrapper(env)
-env.reset()
+check_env(env)
 
+models_dir = "models/Blackjack/PPO"
 model_path = f"{models_dir}/290000.zip"
 model = PPO.load(model_path, env=env)
 
