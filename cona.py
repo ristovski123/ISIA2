@@ -62,7 +62,7 @@ for ep in range(episodes):
         print("obs: ", obs)
         print("action made by model: ", action)
         # pass action to env and get info back
-        obs, rewards, done,trunc,  info = env.step(action)
+        obs, rewards, done, trunc,  info = env.step(action)
 
         # show the environment on the screen
         env.render()
