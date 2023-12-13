@@ -1,6 +1,4 @@
-import gym
 import gymnasium
-from gym import spaces
 from stable_baselines3 import PPO
 import numpy as np
 import os
@@ -24,8 +22,8 @@ class TupleToMultiDiscreteWrapper(gymnasium.ObservationWrapper):
         
 
 
-models_dir = "models/Blackjack/PPO"
-logdir = "logs/Blackjack"
+models_dir = "models/OriginalBlackjack/PPO"
+logdir = "logs/OriginalEnv"
 
 if not os.path.exists(models_dir):
     os.makedirs(models_dir)
@@ -46,27 +44,9 @@ model = PPO('MlpPolicy', env, verbose=1,tensorboard_log=logdir)
 
 TIMESTEPS = 10000
 iters = 0
-for i in range(200):
+for i in range(1500):
     model.learn(total_timesteps=TIMESTEPS, reset_num_timesteps=False, tb_log_name="PPO")
     model.save(f"{models_dir}/{TIMESTEPS*i}")
 
-
-episodes = 10
-
-for ep in range(episodes):
-    obs, info = env.reset()
-    done = False
-    while not done:
-        # pass observation to model to get predicted action
-        action, _states = model.predict(obs)
-        print("obs: ", obs)
-        print("action made by model: ", action)
-        # pass action to env and get info back
-        obs, rewards, done,trunc,  info = env.step(action)
-
-        # show the environment on the screen
-        env.render()
-        print(ep, rewards, done)
-        print("---------------")
 
 # Now, env has a MultiDiscrete observation space

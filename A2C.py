@@ -1,6 +1,4 @@
-import gym
 import gymnasium
-from gym import spaces
 from stable_baselines3 import A2C
 import numpy as np
 import os
@@ -24,8 +22,8 @@ class TupleToMultiDiscreteWrapper(gymnasium.ObservationWrapper):
         
 
 
-models_dir = "models/Blackjack/A2C"
-logdir = "logs/Blackjack"
+models_dir = "models/OrigingalBlackjack/A2C"
+logdir = "logs/OriginalEnv"
 
 if not os.path.exists(models_dir):
     os.makedirs(models_dir)
@@ -46,7 +44,7 @@ model = A2C('MlpPolicy', env, verbose=1,tensorboard_log=logdir)
 
 TIMESTEPS = 10000
 iters = 0
-for i in range(200):
+for i in range(1500):
     model.learn(total_timesteps=TIMESTEPS, reset_num_timesteps=False, tb_log_name="A2C")
     model.save(f"{models_dir}/{TIMESTEPS*i}")
 
