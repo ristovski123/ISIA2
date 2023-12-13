@@ -23,22 +23,62 @@ class TupleToMultiDiscreteWrapper(gym.ObservationWrapper):
 print ("cona pesada")
 models_dir = "models/Blackjack/PPO"
 
-env = gym.make('Blackjack-v1', render_mode="human")  # continuous: LunarLanderContinuous-v2
+env = gym.make('Blackjack-v1', render_mode="rgb_array")  # continuous: LunarLanderContinuous-v2
 env = TupleToMultiDiscreteWrapper(env)
 env.reset()
 
-model_path = f"{models_dir}/290000.zip"
+model_path = f"{models_dir}/1210000.zip"
 model = PPO.load(model_path, env=env)
 
-episodes = 10
+episodes = 100000
+jogadas = []
 
 for ep in range(episodes):
+    jogada = []
     obs, info = env.reset()
     done = False
+
     while not done:
+        # Pass observation to model to get predicted action
         action, _states = model.predict(obs)
+
+        # Store the current step's information
+        step_info = {'obs': obs, 'action': action}
+        jogada.append(step_info)
+
+        # Pass action to the environment and get info back
         obs, rewards, done, trunc, info = env.step(action)
-        print("obs: ", obs)
-        print("action", action)
-        print("reward", rewards)
-        env.render()
+
+    # Store the final step's information when the episode is done
+    step_info = {'obs': obs, 'rewards': rewards}
+    jogada.append(step_info)
+
+    # Append the entire episode's trajectory to the list
+    jogadas.append(jogada)
+
+# Now, jogadas contains the trajectory for each episode
+
+
+    env.render()
+
+#print("caBOU")
+#print(jogadas)
+
+import pandas as pd
+
+# Assuming jogadas is a list of lists (each sublist represents an episode's trajectory)
+# where each item in the sublist is a dictionary containing 'obs', 'action', 'rewards', etc.
+
+# Flatten the list of dictionaries into a list of flat dictionaries
+flat_jogadas = [step_info for episode in jogadas for step_info in episode]
+
+# Convert the list of dictionaries to a Pandas DataFrame
+df = pd.DataFrame(flat_jogadas)
+
+# Print or further analyze the DataFrame
+print(df)
+
+#move to csv
+
+df.to_csv('jogadas.csv', index=False)
+
