@@ -33,6 +33,7 @@ for step in range(10):
     obs, rewards, done, trunc, info = env.step(env.action_space.sample())
     print(obs)
     print(rewards)
+    env.reset()
 env.close()
 
 
