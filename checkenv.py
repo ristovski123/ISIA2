@@ -1,10 +1,10 @@
 from stable_baselines3.common.env_checker import check_env
 from blackjenv import BlackjackWithDoubleEnv
 import numpy as np
-import gymnasium
+import gymnasium as gym
 from stable_baselines3 import PPO
 
-class TupleToMultiDiscreteWrapper(gymnasium.ObservationWrapper):
+class TupleToMultiDiscreteWrapper(gym.ObservationWrapper):
     def __init__(self, env):
         super(TupleToMultiDiscreteWrapper, self).__init__(env)
         parametro_1 = self.observation_space.spaces[0].n
@@ -12,7 +12,7 @@ class TupleToMultiDiscreteWrapper(gymnasium.ObservationWrapper):
         parametro_3 = self.observation_space.spaces[2].n
 
 
-        self.observation_space = gymnasium.spaces.MultiDiscrete([parametro_1,parametro_2,parametro_3])
+        self.observation_space = gym.spaces.MultiDiscrete([parametro_1,parametro_2,parametro_3])
 
     def observation(self, observation):
         parametro_1 = observation[0]
@@ -24,13 +24,25 @@ class TupleToMultiDiscreteWrapper(gymnasium.ObservationWrapper):
 
 env = BlackjackWithDoubleEnv()
 env = TupleToMultiDiscreteWrapper(env)
-check_env(env)
+#check_env(env)
 
-models_dir = "models/Blackjack/PPO"
-model_path = f"{models_dir}/290000.zip"
-model = PPO.load(model_path, env=env)
+env.reset()
 
-episodes = 100
+for step in range(10):
+    #env.render()
+    obs, rewards, done, trunc, info = env.step(env.action_space.sample())
+    print(obs)
+    print(rewards)
+env.close()
+
+
+
+
+#models_dir = "models/Blackjack/PPO"
+#model_path = f"{models_dir}/290000.zip"
+#model = PPO.load(model_path, env=env)
+
+"""episodes = 100
 rewardinicial=100
 for ep in range(episodes):
     obs, info = env.reset()
@@ -44,3 +56,4 @@ for ep in range(episodes):
         print("reward", rewards)
         env.render()
     print(rewardinicial)
+    """
