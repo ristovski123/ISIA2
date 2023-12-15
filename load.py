@@ -27,7 +27,7 @@ env = gym.make('Blackjack-v1', render_mode="human")  # continuous: LunarLanderCo
 env = TupleToMultiDiscreteWrapper(env)
 env.reset()
 
-model_path = f"{models_dir}/88600000.zip"
+model_path = f"{models_dir}/290000.zip"
 model = PPO.load(model_path, env=env)
 
 episodes = 100
