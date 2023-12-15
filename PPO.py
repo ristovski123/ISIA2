@@ -22,8 +22,8 @@ class TupleToMultiDiscreteWrapper(gymnasium.ObservationWrapper):
         
 
 
-models_dir = "models/OriginalBlackjack/PPO"
-logdir = "logs/OriginalEnv"
+models_dir = "models/OriginalBlackjack/PPOTunned"
+logdir = "logs/TunnedEnv"
 
 if not os.path.exists(models_dir):
     os.makedirs(models_dir)
@@ -32,7 +32,7 @@ if not os.path.exists(logdir):
     os.makedirs(logdir)
 
 # Example usage
-env = gymnasium.make("Blackjack-v1",render_mode = "rgb_array")  # Replace with the actual name of your environment
+env = gymnasium.make("Blackjack-v1", render_mode = "rgb_array")  # Replace with the actual name of your environment
 env = TupleToMultiDiscreteWrapper(env)
 
 observation, info = env.reset()
