@@ -28,7 +28,7 @@ models_dir = "models/OriginalBlackjack/PPO_model2"
 env = BlackjackWithDoubleEnv()
 env = TupleToMultiDiscreteWrapper(env)
 env.reset()
-model_path = f"{models_dir}/8150000.zip"
+model_path = f"{models_dir}/8160000.zip"
 model = PPO.load(model_path, env=env)
 
 episodes = 100000
